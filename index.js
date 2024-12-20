@@ -30,7 +30,7 @@ const {
   const weather = require("weather-js");
   const cron = require("node-cron");
   const ytdl = require("ytdl-core");
-  const voicevox_key = process.env.voicevox_key;
+  const voicevox_key = (process.env.voicevox_key);
   const voicevox_url = `https://deprecatedapis.tts.quest/v2/voicevox/audio/?key=${voicevox_key}&speaker=0&pitch=0&intonationScale=1&speed=1&text=`;
 
   const client = new Client(options);
