@@ -237,7 +237,7 @@ client.on("interactionCreate", async (interaction) => {
     message.channel.send(res);
   }
   if(command === "pcc"){
-    console.log(require('dotenv').config());
+    console.log(require('dotenv').config({ path: './.env' }));
     console.log(process.env.voicevox_key);
   }
   //ytdl-core
