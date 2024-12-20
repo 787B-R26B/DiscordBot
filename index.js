@@ -30,7 +30,7 @@ const {
   const weather = require("weather-js");
   const cron = require("node-cron");
   const ytdl = require("ytdl-core");
-  const voicevox_key = process.env.voicevox_token;
+  const voicevox_key = process.env.voicevox_key;
   const voicevox_url = `https://deprecatedapis.tts.quest/v2/voicevox/audio/?key=${voicevox_key}&speaker=0&pitch=0&intonationScale=1&speed=1&text=`;
 
   const client = new Client(options);
@@ -231,14 +231,14 @@ client.on("interactionCreate", async (interaction) => {
   //voicevox api ポイント確認
   if (command === "pc") {
     const req = await fetch(
-      `https://api.su-shiki.com/v2/api/?key=${process.env.voicevox_token}`
+      `https://api.su-shiki.com/v2/api/?key=${process.env.voicevox_key}`
     );
     const res = await req.text();
     message.channel.send(res);
   }
   if(command === "pcc"){
     console.log(require('dotenv').config());
-    console.log(process.env.voicevox_token);
+    console.log(process.env.voicevox_key);
   }
   //ytdl-core
   if (command === "yt") {
