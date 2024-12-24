@@ -1,4 +1,2 @@
-# This is readme.md
-> test
-- test 
+# This is Amemiya's Discord bot
 
