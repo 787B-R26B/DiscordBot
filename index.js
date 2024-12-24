@@ -26,6 +26,8 @@ const {
   } = require ("@discordjs/voice");
 
   const https = require("https");
+  const sharp = require("sharp");
+  const mathjax = require("mathjax");
   const fs = require("fs");
   const weather = require("weather-js");
   const cron = require("node-cron");
@@ -141,6 +143,10 @@ client.on("interactionCreate", async (interaction) => {
 
     if (!message.content.startsWith(prefix)) return;
   const [command, ...args] = message.content.slice(prefix.length).split(/\s+/g);
+  if (command === "tex"){
+    
+
+  }
   if (command === "w") {
     weather.find({ search: args[0], degreeType: "C" }, function (err, result) {
       if (err) message.channel.send(err);
