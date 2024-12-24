@@ -41,6 +41,27 @@ const {
 
   const prefix = "!"
 
+
+  const renderMathToSVG = async (mathInput) => {
+    // MathJaxの初期化
+    const mjInstance = await mathjax.init({
+        loader: { load: ['input/tex', 'output/svg'] },
+    });
+    const svg = mjInstance.tex2svg(mathInput, { display: true });
+    const svgString = mjInstance.startup.adaptor.innerHTML(svg);
+    return svgString;
+};
+
+const convertSVGToPNG = async (svgString) => {
+  // SVGをPNGに変換
+  const pngBuffer = await sharp(Buffer.from(svgString))
+      .flatten({ background: { r: 255, g: 255, b: 255 } }) 
+      .resize(1600, 490, { fit: 'contain' }) 
+      .png()
+      .toBuffer();
+  return pngBuffer;
+};
+
   client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.emoji.name === '✅' && !user.bot) {
       const role = reaction.message.guild.roles.cache.find(role => role.name === 'Time-signal');
@@ -143,10 +164,21 @@ client.on("interactionCreate", async (interaction) => {
 
     if (!message.content.startsWith(prefix)) return;
   const [command, ...args] = message.content.slice(prefix.length).split(/\s+/g);
-  if (command === "tex"){
-    
+
+  if (command === "tex"){    
+    const tex_str = args.join(" ");
+    console.log(tex_str)
+    try {
+      const svg = await renderMathToSVG(tex_str);
+      const png = await convertSVGToPNG(svg);
+      message.reply({ files: [{ attachment: png, name: 'math.png' }] });
+  } catch (error) {
+      console.error('Error rendering math:', error);
+      message.reply('数式のレンダリングに失敗しました。入力を確認してください。');
+  }
 
   }
+
   if (command === "w") {
     weather.find({ search: args[0], degreeType: "C" }, function (err, result) {
       if (err) message.channel.send(err);
