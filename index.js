@@ -166,7 +166,7 @@ client.on("interactionCreate", async (interaction) => {
   const [command, ...args] = message.content.slice(prefix.length).split(/\s+/g);
 
   if (command === "tex"){    
-    const tex_str = message.content.split(" ")[1];
+    const tex_str = args.join(" ");
     console.log(tex_str)
     try {
       const svg = await renderMathToSVG(tex_str);
