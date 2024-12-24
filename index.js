@@ -169,7 +169,7 @@ client.on("interactionCreate", async (interaction) => {
     try {
       const svg = await renderMathToSVG(tex_str);
       const png = await convertSVGToPNG(svg);
-      message.reply({ files: [{ attachment: png, name: 'math.svg' }] });
+      message.reply({ files: [{ attachment: png, name: 'math.png' }] });
   } catch (error) {
       console.error('Error rendering math:', error);
       message.reply('数式のレンダリングに失敗しました。入力を確認してください。');
