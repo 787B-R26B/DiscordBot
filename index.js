@@ -52,8 +52,13 @@ const {
     return svgString;
 };
 
-
-
+const convertSVGToPNG = async (svgString) => {
+  // SVGをPNGに変換
+  const pngBuffer = await sharp(Buffer.from(svgString))
+      .png()
+      .toBuffer();
+  return pngBuffer;
+};
 
   client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.emoji.name === '✅' && !user.bot) {
@@ -160,17 +165,18 @@ client.on("interactionCreate", async (interaction) => {
 
   if (command === "tex"){    
     const tex_str = message.content.split(" ")[1];
-    //console.log(tex)
+    console.log(tex)
     try {
       const svg = await renderMathToSVG(tex_str);
-      // SVGをファイルとして送信する
-      const buffer = Buffer.from(svg, 'utf-8');
-      message.reply({ files: [{ attachment: buffer, name: 'math.svg' }] });
+      const png = await convertSVGToPNG(svg);
+      message.reply({ files: [{ attachment: png, name: 'math.svg' }] });
   } catch (error) {
       console.error('Error rendering math:', error);
       message.reply('数式のレンダリングに失敗しました。入力を確認してください。');
   }
+
   }
+
   if (command === "w") {
     weather.find({ search: args[0], degreeType: "C" }, function (err, result) {
       if (err) message.channel.send(err);
