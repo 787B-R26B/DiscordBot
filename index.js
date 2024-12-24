@@ -41,6 +41,20 @@ const {
 
   const prefix = "!"
 
+
+  const renderMathToSVG = async (mathInput) => {
+    // MathJaxの初期化
+    const mjInstance = await mathjax.init({
+        loader: { load: ['input/tex', 'output/svg'] },
+    });
+    const svg = mjInstance.tex2svg(mathInput, { display: true });
+    const svgString = mjInstance.startup.adaptor.innerHTML(svg);
+    return svgString;
+};
+
+
+
+
   client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.emoji.name === '✅' && !user.bot) {
       const role = reaction.message.guild.roles.cache.find(role => role.name === 'Time-signal');
@@ -143,9 +157,19 @@ client.on("interactionCreate", async (interaction) => {
 
     if (!message.content.startsWith(prefix)) return;
   const [command, ...args] = message.content.slice(prefix.length).split(/\s+/g);
-  if (command === "tex"){
-    
 
+  if (command === "tex"){    
+    const tex_str = message.content.split(" ")[1];
+    //console.log(tex)
+    try {
+      const svg = await renderMathToSVG(tex_str);
+      // SVGをファイルとして送信する
+      const buffer = Buffer.from(svg, 'utf-8');
+      message.reply({ files: [{ attachment: buffer, name: 'math.svg' }] });
+  } catch (error) {
+      console.error('Error rendering math:', error);
+      message.reply('数式のレンダリングに失敗しました。入力を確認してください。');
+  }
   }
   if (command === "w") {
     weather.find({ search: args[0], degreeType: "C" }, function (err, result) {
