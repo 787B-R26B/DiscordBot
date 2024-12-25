@@ -56,8 +56,9 @@ const convertSVGToPNG = async (svgString) => {
   // SVGをPNGに変換
   const pngBuffer = await sharp(Buffer.from(svgString))
       .flatten({ background: { r: 255, g: 255, b: 255 } }) 
-      .resize(1600, 800, { fit: 'cover' })
-      .png()
+      .resize(1600, 800, { fit: 'contain' })
+      .resize ({width:800})
+      .png({ compressionLevel: 0 })
       .trim()
       .toBuffer();
   return pngBuffer;
